@@ -1,0 +1,27 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Dispara a action sempre que você subir uma tag começando com 'v' (ex: v1.0.0, v1.1.0)
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Necessário para o bot ter permissão de publicar a release
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create ZIP Archive
+        run: |
+          zip -r MasterDiceForMeet.zip manifest.json conteudo.js jsdice-core.js icon16.png icon48.png icon128.png LICENSE README.md
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: MasterDiceForMeet.zip
+          generate_release_notes: true

@@ -33,3 +33,6 @@ Thumbs.db
 
 # Permite que os ícones do projeto subam pro git (Chrome Store exige)
 !*.png
+
+# Scripts PowerShell
+*.ps1

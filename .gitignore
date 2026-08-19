@@ -24,3 +24,12 @@ Thumbs.db
 *.zip
 *.tar.gz
 *.rar
+
+# Images (Geral)
+*.jpg
+*.webp
+*.gif
+*.jpeg
+
+# Permite que os ícones do projeto subam pro git (Chrome Store exige)
+!*.png

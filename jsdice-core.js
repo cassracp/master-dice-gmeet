@@ -123,11 +123,18 @@
 
     const initialRolls = [];
     
-    // ANTI-FRAUD: Cryptographically secure random roll
+    // ANTI-FRAUD: Cryptographically secure random roll com Rejection Sampling para evitar Modulo Bias
     const performRoll = () => {
       const buffer = new Uint32Array(1);
-      window.crypto.getRandomValues(buffer);
-      return (buffer[0] % numSides) + 1;
+      // Calcula o limite máximo divisível pelo número de lados para evitar o 'modulo bias'
+      const maxValid = 4294967295 - (4294967295 % numSides);
+      let randomValue;
+      do {
+        window.crypto.getRandomValues(buffer);
+        randomValue = buffer[0];
+      } while (randomValue >= maxValid); // Rejeita valores que causariam viés
+      
+      return (randomValue % numSides) + 1;
     };
 
     let rerollCondition = null;

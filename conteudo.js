@@ -15,16 +15,23 @@
   // quando ele recria os elementos do chat durante o envio.
   const rolagensRecentes = new Set();
 
-  /**
-   * Envia o texto formatado no campo de chat do Google Meet.
-   */
-  function enviarRespostaChat(textoMensagem) {
+  // Fila de mensagens para evitar sobrescrita (Race Condition) no chat
+  const filaMensagens = [];
+  let enviandoMensagem = false;
+
+  function processarFilaMensagens() {
+    if (enviandoMensagem || filaMensagens.length === 0) return;
+    
+    enviandoMensagem = true;
+    const textoMensagem = filaMensagens[0]; // Pega a primeira da fila
+
     const campoDigitacao = document.querySelector(
       'textarea[name="chatTextInput"], textarea[aria-label*="mensagem"], textarea[aria-label*="message"], div[contenteditable="true"][aria-label*="mensagem"]',
     );
 
     if (!campoDigitacao) {
       console.warn("[Master Dice] Campo de digitação do chat não encontrado.");
+      enviandoMensagem = false;
       return;
     }
 
@@ -93,7 +100,22 @@
           }),
         );
       }
+
+      // Conclui o envio, remove da fila e processa a próxima após um respiro do DOM
+      setTimeout(() => {
+        filaMensagens.shift();
+        enviandoMensagem = false;
+        processarFilaMensagens();
+      }, 300);
     }, 250);
+  }
+
+  /**
+   * Coloca o texto formatado na fila para envio seguro no chat.
+   */
+  function enviarRespostaChat(textoMensagem) {
+    filaMensagens.push(textoMensagem);
+    processarFilaMensagens();
   }
 
   /**

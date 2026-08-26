@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Master Dice for Google Meet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dice Roller and GM Assistant for Google Meet.",
   "icons": {
     "16": "icon16.png",

@@ -1,10 +1,10 @@
-﻿# publicar.ps1 - Pipeline de PublicaÃ§Ã£o Local do ReadyToRoll (R2R)
+# publicar.ps1 - Pipeline de Publicação Local do ReadyToRoll (R2R)
 param(
     [switch]$Help
 )
 
 if ($Help) {
-    Write-Host "Script interativo para compilar, testar e empacotar localmente versÃµes do ReadyToRoll (R2R)."
+    Write-Host "Script interativo para compilar, testar e empacotar localmente versões do ReadyToRoll (R2R)."
     exit
 }
 
@@ -12,22 +12,22 @@ Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host "   ReadyToRoll (R2R) - Publicador Local  " -ForegroundColor Cyan
 Write-Host "=========================================`n" -ForegroundColor Cyan
 
-# 1. Solicita a versÃ£o
-$version = Read-Host "Digite o nÃºmero da nova versÃ£o (ex: 2.0.0, sem o 'v')"
+# 1. Solicita a versão
+$version = Read-Host "Digite o número da nova versão (ex: 2.0.0, sem o 'v')"
 if ([string]::IsNullOrWhiteSpace($version)) {
-    Write-Host "VersÃ£o nÃ£o informada. Cancelando." -ForegroundColor Red
+    Write-Host "Versão não informada. Cancelando." -ForegroundColor Red
     exit 1
 }
 
-# 2. Solicita o resumo da alteraÃ§Ã£o
-$message = Read-Host "Digite o resumo das alteraÃ§Ãµes (ex: âœ¨ feat: adicionar qrcode e abas mobile)"
+# 2. Solicita o resumo da alteração
+$message = Read-Host "Digite o resumo das alterações (ex: ✨ feat: adicionar qrcode e abas mobile)"
 if ([string]::IsNullOrWhiteSpace($message)) {
-    Write-Host "Mensagem nÃ£o informada. Cancelando." -ForegroundColor Red
+    Write-Host "Mensagem não informada. Cancelando." -ForegroundColor Red
     exit 1
 }
 
-# 3. Atualiza versÃ£o nos arquivos de manifesto e package.json
-Write-Host "`n[1/4] Sincronizando versÃ£o $version nos manifestos e package.json..." -ForegroundColor Yellow
+# 3. Atualiza versão nos arquivos de manifesto e package.json
+Write-Host "`n[1/4] Sincronizando versão $version nos manifestos e package.json..." -ForegroundColor Yellow
 $arquivosVersao = @(
     "package.json",
     "src/manifest.json",
@@ -37,38 +37,38 @@ $arquivosVersao = @(
 foreach ($arquivo in $arquivosVersao) {
     if (Test-Path $arquivo) {
         (Get-Content $arquivo -Raw) -replace '"version":\s*"[^"]+"', "`"version`": `"$version`"" | Set-Content $arquivo -NoNewline
-        Write-Host "   âœ“ $arquivo atualizado" -ForegroundColor Green
+        Write-Host "   ✓ $arquivo atualizado" -ForegroundColor Green
     }
 }
 
 # 4. Executa testes automatizados
-Write-Host "`n[2/4] Executando testes unitÃ¡rios do motor de dados..." -ForegroundColor Yellow
+Write-Host "`n[2/4] Executando testes unitários do motor de dados..." -ForegroundColor Yellow
 npm test
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Falha nos testes unitÃ¡rios. Cancelando publicaÃ§Ã£o." -ForegroundColor Red
+    Write-Host "Falha nos testes unitários. Cancelando publicação." -ForegroundColor Red
     exit 1
 }
 
-# 5. Executa compilaÃ§Ã£o multi-alvo (Chrome, Firefox e Web)
-Write-Host "`n[3/4] Compilando e gerando pacotes de distribuiÃ§Ã£o (npm run build)..." -ForegroundColor Yellow
+# 5. Executa compilação multi-alvo (Chrome, Firefox e Web)
+Write-Host "`n[3/4] Compilando e gerando pacotes de distribuição (npm run build)..." -ForegroundColor Yellow
 npm run build
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "Erro durante a compilaÃ§Ã£o multi-alvo. Cancelando." -ForegroundColor Red
+    Write-Host "Erro durante a compilação multi-alvo. Cancelando." -ForegroundColor Red
     exit 1
 }
 
-# Gera cÃ³pias versionadas dos pacotes oficiais para histÃ³rico de releases
+# Gera cópias versionadas dos pacotes oficiais para histórico de releases
 Copy-Item "dist/ready-to-roll-chrome.zip" "dist/ready-to-roll-chrome-v$version.zip" -Force
 Copy-Item "dist/ready-to-roll-firefox.zip" "dist/ready-to-roll-firefox-v$version.zip" -Force
 
 Write-Host "`n[4/4] Pacotes gerados com sucesso na pasta dist/:" -ForegroundColor Green
-Write-Host "   ðŸ“¦ dist/ready-to-roll-chrome-v$version.zip  (Chrome Web Store / Edge)" -ForegroundColor Cyan
-Write-Host "   ðŸ“¦ dist/ready-to-roll-firefox-v$version.zip (Mozilla Firefox AMO)" -ForegroundColor Cyan
-Write-Host "   ðŸŒ dist/web/ (Pronto para deploy na Vercel)" -ForegroundColor Cyan
+Write-Host "   📦 dist/ready-to-roll-chrome-v$version.zip  (Chrome Web Store / Edge)" -ForegroundColor Cyan
+Write-Host "   📦 dist/ready-to-roll-firefox-v$version.zip (Mozilla Firefox AMO)" -ForegroundColor Cyan
+Write-Host "   🌐 dist/web/ (Pronto para deploy na Vercel)" -ForegroundColor Cyan
 
 # 6. Pergunta sobre commit no Git
 Write-Host "`n===========================================================" -ForegroundColor Green
-Write-Host " Build v$version concluÃ­do com Ãªxito! " -ForegroundColor Green
+Write-Host " Build v$version concluído com êxito! " -ForegroundColor Green
 Write-Host "===========================================================" -ForegroundColor Green
 
 $confirmarGit = Read-Host "`nDeseja preparar e enviar o commit no Git agora? (S/N)"
@@ -78,7 +78,7 @@ if ($confirmarGit -eq 'S' -or $confirmarGit -eq 's') {
     git tag "v$version"
     git push
     git push origin "v$version"
-    Write-Host "AlteraÃ§Ãµes e tags enviadas para o repositÃ³rio remoto!" -ForegroundColor Green
+    Write-Host "Alterações e tags enviadas para o repositório remoto!" -ForegroundColor Green
 } else {
-    Write-Host "Git ignorado. VocÃª pode commitar manualmente quando desejar." -ForegroundColor Yellow
+    Write-Host "Git ignorado. Você pode commitar manualmente quando desejar." -ForegroundColor Yellow
 }

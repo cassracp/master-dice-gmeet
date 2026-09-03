@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ReadyToRoll (R2R) - Mesa Virtual de Dados</title>
+  
+  <!-- SEO & PWA Metadados -->
+  <meta name="description" content="VTT ultraleve para rolagem de dados em tempo real com sincronização P2P WebRTC. Acesse no celular, tablet ou PC sem instalar nada.">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ReadyToRoll">
+
+  <!-- Open Graph para WhatsApp, Telegram e Discord -->
+  <meta property="og:title" content="ReadyToRoll (R2R) - Mesa Virtual de Dados">
+  <meta property="og:description" content="Entre na mesa de RPG para rolar dados em tempo real diretamente pelo celular ou navegador!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./assets/icon128.png">
+
+  <!-- Ícone e PWA Manifest -->
+  <link rel="icon" type="image/png" href="./assets/icon48.png">
+  <link rel="apple-touch-icon" href="./assets/icon128.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #0b0f19;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #r2r-web-app {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <div id="r2r-web-app"></div>
+  <script type="module" src="./app-web.js"></script>
+</body>
+</html>

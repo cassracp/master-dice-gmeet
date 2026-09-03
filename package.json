@@ -1,0 +1,29 @@
+{
+  "name": "ready-to-roll-vtt",
+  "version": "2.0.0",
+  "description": "ReadyToRoll (R2R) - VTT leve para rolagem de dados em tempo real via P2P WebRTC",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/construir.js",
+    "test": "node test/motor-dados.teste.js"
+  },
+  "keywords": [
+    "vtt",
+    "dice-roller",
+    "rpg",
+    "google-meet",
+    "webrtc",
+    "p2p"
+  ],
+  "author": "ReadyToRoll Team",
+  "license": "MIT",
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "trystero": "^0.20.1"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.1",
+    "vite": "^5.4.14"
+  }
+}

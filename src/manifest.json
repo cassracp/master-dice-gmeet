@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "ReadyToRoll (R2R) - Virtual Tabletop de Dados",
+  "version": "2.0.0",
+  "description": "VTT leve para rolagem de dados em tempo real via P2P WebRTC no Google Meet e qualquer página web.",
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "sidePanel"
+  ],
+  "side_panel": {
+    "default_path": "standalone/index.html"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Abrir ReadyToRoll (R2R)",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+R",
+        "mac": "Alt+R"
+      },
+      "description": "Alternar ReadyToRoll VTT"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://meet.google.com/*"
+      ],
+      "js": ["content/injetor.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*",
+        "content/*",
+        "standalone/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

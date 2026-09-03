@@ -1,4 +1,4 @@
-# Logs
+﻿# Logs
 logs
 *.log
 npm-debug.log*
@@ -29,10 +29,8 @@ Thumbs.db
 *.jpg
 *.webp
 *.gif
-*.jpeg
 
-# Permite que os ícones do projeto subam pro git (Chrome Store exige)
-!*.png
-
-# Scripts PowerShell
-*.ps1
+# Gemini
+GEMINI/
+GEMINI.md
+README_GEMINI.md

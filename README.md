@@ -1,126 +1,112 @@
-# 🎲 Master Dice for Google Meet
+﻿# ðŸŽ² ReadyToRoll (R2R) - Virtual Tabletop de Dados
 
 <div align="center">
-  <p><strong>A seamless, powerful, and secure dice roller for Google Meet chats.</strong></p>
-  <sub>🇧🇷 <a href="#-português">Português</a> | 🇺🇸 <a href="#-english">English</a></sub>
+  <p><strong>Mesa Virtual (VTT) ultraleve, moderna e serverless para rolagem de dados em tempo real via P2P WebRTC.</strong></p>
+  <p>Funciona no <strong>Google Chrome</strong>, <strong>Microsoft Edge</strong>, <strong>Mozilla Firefox</strong> e como <strong>Web App PWA</strong> no celular, tablet ou computador.</p>
+
+  <p>
+    <img src="https://img.shields.io/badge/VersÃ£o-2.0.0-8b5cf6?style=for-the-badge" alt="VersÃ£o 2.0.0" />
+    <img src="https://img.shields.io/badge/LicenÃ§a-MIT-10b981?style=for-the-badge" alt="LicenÃ§a MIT" />
+    <img src="https://img.shields.io/badge/P2P-WebRTC-06b6d4?style=for-the-badge" alt="WebRTC P2P" />
+    <img src="https://img.shields.io/badge/Multi--Platform-Chrome%20|%20Firefox%20|%20Web%20PWA-f59e0b?style=for-the-badge" alt="Multi-Platform" />
+  </p>
 </div>
 
 ---
 
-## 🇧🇷 Português
+## ðŸŒŸ O que Ã© o ReadyToRoll?
 
-Uma extensão de navegador leve e poderosa que transforma o chat do Google Meet em um sistema completo de rolagem de dados para sessões de RPG de mesa. 
+O **ReadyToRoll (R2R)** Ã© uma mesa virtual de dados projetada para sessÃµes de RPG de mesa (D&D, Tormenta20, Ordem Paranormal, Call of Cthulhu, Pathfinder, etc.). 
 
-O grande diferencial do **Master Dice** é o modelo centralizado (Mestre-Servidor): **Apenas o Mestre precisa instalar a extensão**. O script monitora o chat silenciosamente e responde de forma automatizada (estilo Rollem) quando qualquer jogador digita uma notação de dado.
-
-### ✨ Recursos Principais
-- **Instalação Única:** Seus jogadores não precisam baixar ou configurar nada. Eles digitam no chat do celular ou PC, e a sua extensão escuta e responde por eles.
-- **Natural Language Parsing:** Role dados no meio de uma frase naturalmente. Ex: `"Eu ataco o orc com minha espada, 1d20 + 5 de dano"`. A extensão extrai automaticamente o `1d20 + 5`.
-- **Anti-Fraude e Segurança:** Usa `window.crypto.getRandomValues` em vez do tradicional `Math.random()` para garantir entropia criptográfica e aleatoriedade verdadeira nos dados.
-- **Calculadora Embutida:** Resolve contas matemáticas instantaneamente com o prefixo `r`.
-
-### 🚀 Como Instalar
-
-Como esta extensão não está (ainda) na Chrome Web Store, a instalação é feita manualmente:
-1. Baixe o código fonte deste repositório (ZIP) e extraia em uma pasta.
-2. Abra o Google Chrome ou Edge e acesse a página de extensões (`chrome://extensions/` ou `edge://extensions/`).
-3. Ative o **"Modo do desenvolvedor"** no canto superior direito.
-4. Clique no botão **"Carregar sem compactação"** (Load unpacked) e selecione a pasta onde você extraiu os arquivos.
-5. Pronto! Basta entrar em uma chamada do Google Meet. A extensão funcionará automaticamente.
-
-### 📖 Guia de Comandos e Notações
-
-O motor de dados é extremamente robusto. Veja tudo o que você e seus jogadores podem digitar no chat:
-
-#### 1. Rolagens Naturais e Matemáticas
-Você pode digitar os dados isolados ou no meio de frases:
-* `1d20` ➔ Rola um dado de 20 faces.
-* `2d6 + 3` ➔ Rola dois dados de 6 faces e soma 3 ao total.
-* `1d8 * 2` ➔ Rola um dado de 8 e multiplica por 2.
-* `Ataque com espada! 1d20+4` ➔ Lê a frase e rola o dado automaticamente.
-* `[2d10 + 5]` ➔ Use colchetes se quiser isolar uma rolagem muito complexa no meio de um texto para garantir que ela seja lida corretamente.
-
-#### 2. Modo Calculadora
-Você pode usar a extensão para resolver matemática básica instantaneamente usando a letra `r` antes da conta:
-* `r 2+2` ➔ Retorna `4`.
-* `r (10 * 2) / 4` ➔ Retorna `5`.
-* `r 1d20 + 5` ➔ Rola o dado e calcula tudo (também pode ser usado se a rolagem natural falhar em capturar algum formato muito estranho).
-
-#### 3. Vantagem, Desvantagem (Keep e Drop)
-* `2d20kh1` ➔ Rola 2d20 e **MANTÉM O MAIOR** (Vantagem - *Keep Highest*).
-* `2d20kl1` ➔ Rola 2d20 e **MANTÉM O MENOR** (Desvantagem - *Keep Lowest*).
-* `4d6kh3` ➔ Rola 4d6 e mantém os 3 maiores (Criação de personagem no D&D).
-* `4d6dl1` ➔ Rola 4d6 e **DESCARTA O MENOR** (*Drop Lowest* - O mesmo que o de cima).
-* `4d6dh1` ➔ Rola 4d6 e **DESCARTA O MAIOR** (*Drop Highest*).
-
-#### 4. Dados Explosivos (Exploding Dice)
-Se o valor rolado atingir um limite, um dado extra é rolado e somado!
-* `4d6!` ➔ Explode (rola de novo) se o dado cair no valor MÁXIMO (6).
-* `4d6!>=5` ➔ Explode se o valor for maior ou igual a 5.
-* `4d6!L2` ➔ Explode no máximo 2 vezes por dado (limite de explosão).
-
-#### 5. Rerrolagens (Rerolls)
-Role novamente um dado e descarte o resultado antigo se a condição for atendida.
-* `4d6r1` ➔ Rerrola qualquer dado que cair 1 (*Halfling Luck* no D&D).
-* `4d6r<3` ➔ Rerrola valores menores que 3.
-* `4d6r1L1` ➔ Rerrola 1s, mas com limite máximo de 1 vez por dado.
+Diferente de plataformas pesadas e complexas, o R2R Ã© **serverless e descentralizado**:
+- A comunicaÃ§Ã£o ocorre diretamente entre os navegadores dos participantes atravÃ©s de **WebRTC P2P**.
+- **Sem cadastros, sem servidores dedicados e sem chaves de API**: basta compartilhar o cÃ³digo da sessÃ£o, o link direto ou escanear o **QR Code**!
+- O mestre pode estar no Google Meet pelo computador enquanto os jogadores usam o smartphone como controle de dados fÃ­sico.
 
 ---
 
-## 🇺🇸 English
+## âœ¨ Principais Recursos
 
-A lightweight and powerful browser extension that turns the Google Meet chat into a complete dice rolling system for tabletop RPG sessions.
+- ðŸŒ **SincronizaÃ§Ã£o Serverless P2P em Tempo Real:** ConexÃ£o direta entre navegadores via WebRTC com histÃ³rico compartilhado e lista de presenÃ§a automÃ¡tica.
+- ðŸ“± **ConexÃ£o PC-Mobile por QR Code:** O mestre ou jogador no PC clica em "Conectar Celular" e exibe um QR Code na tela. Quem estiver no celular sÃ³ aponta a cÃ¢mera para entrar direto na mesa!
+- ðŸ“² **Interface Mobile Responsiva com Abas (Bottom Nav):** Em smartphones, o VTT organiza o espaÃ§o em 3 abas fluidas para o polegar:
+  - **ðŸŽ² Dados:** Grade de dados tÃ¡teis grandes (d4 a d100), modificadores e comando rÃ¡pido.
+  - **ðŸ“œ HistÃ³rico:** Feed completo de rolagens com *badge* de notificaÃ§Ã£o para novas rolagens nÃ£o vistas.
+  - **âš¡ Macros:** Seus atalhos personalizados de ataques, perÃ­cias e magias.
+- ðŸ“³ **VibraÃ§Ã£o TÃ¡til (Feedback HÃ¡ptico):** Sinta o impacto dos dados vibrando fisicamente no smartphone ao rolar (`navigator.vibrate`).
+- âš¡ **PWA InstalÃ¡vel:** Pode ser adicionado Ã  Tela de InÃ­cio no iPhone (Safari) e Android (Chrome) para funcionar em tela cheia sem barras de navegador.
+- ðŸªŸ **MÃºltiplos Modos de VisualizaÃ§Ã£o no PC:**
+  - **Janela Flutuante com Shadow DOM:** Design em *Dark Glassmorphism*, arrastÃ¡vel, minimizÃ¡vel para um dock compacto e 100% isolado do CSS da pÃ¡gina.
+  - **Barra Lateral Acoplada (Split-Screen):** Divide a tela com o Google Meet ou mapa sem cobrir o conteÃºdo.
+  - **Pop-up DesacoplÃ¡vel:** Ideal para quem usa dois monitores.
+- ðŸ‘ï¸ **3 NÃ­veis de Visibilidade de Rolagem:**
+  1. **PÃºblica:** Todos na mesa veem o resultado.
+  2. **Direcionada:** VisÃ­vel apenas para os participantes selecionados.
+  3. **Privada:** VisÃ­vel exclusivamente para quem rolou (ideal para testes secretos do mestre).
+- ðŸ”Š **Efeitos Sonoros Procedurais:** Som de dados quicando gerado via **Web Audio API** nativa (sem arquivos pesados de Ã¡udio).
+- â˜… **Destaque Visual para Acertos e Falhas CrÃ­ticas:** IluminaÃ§Ã£o dourada para 20 natural e vermelha para 1 natural no d20.
+- âŒ¨ï¸ **Atalho de Teclado:** Pressione `Alt+R` a qualquer momento para abrir ou recolher o VTT.
 
-The big feature of **Master Dice** is its centralized model (Master-Server architecture): **Only the Game Master needs to install the extension**. The script silently monitors the chat and replies automatically (Rollem bot style) whenever any player types a dice notation.
+---
 
-### ✨ Key Features
-- **Single Installation:** Your players don't need to download or configure anything. They type in the chat from their phone or PC, and your extension listens and replies for them.
-- **Natural Language Parsing:** Roll dice in the middle of a sentence. E.g., `"I attack the orc with my sword, 1d20 + 5 damage"`. The extension automatically extracts `1d20 + 5`.
-- **Anti-Fraud & Security:** Uses `window.crypto.getRandomValues` instead of the traditional `Math.random()` to guarantee cryptographic entropy and true randomness for the dice.
-- **Built-in Calculator:** Instantly solve math equations by prefixing them with the letter `r`.
+## ðŸš€ Como Usar e Instalar
 
-### 🚀 How to Install
+### 1. No Google Chrome / Microsoft Edge (ExtensÃ£o)
+1. Baixe ou clone este repositÃ³rio e execute `npm run build`.
+2. Acesse `chrome://extensions/` ou `edge://extensions/`.
+3. Ative o **"Modo do desenvolvedor"** no canto superior direito.
+4. Clique em **"Carregar sem compactaÃ§Ã£o"** e selecione a pasta **`dist/chrome/`**.
+5. *(Opcional)* VocÃª tambÃ©m pode enviar o pacote pronto **`dist/ready-to-roll-chrome.zip`** para a Chrome Web Store.
 
-Since this extension is not (yet) on the Chrome Web Store, it must be installed manually:
-1. Download the source code from this repository (ZIP) and extract it to a folder.
-2. Open Google Chrome or Edge and go to the extensions page (`chrome://extensions/` or `edge://extensions/`).
-3. Turn on **"Developer mode"** in the top right corner.
-4. Click the **"Load unpacked"** button and select the folder where you extracted the files.
-5. That's it! Just join a Google Meet call and the extension will work automatically.
+### 2. No Mozilla Firefox (ExtensÃ£o)
+1. ApÃ³s executar `npm run build`, abra o Firefox e acesse:
+   ```text
+   about:debugging#/runtime/this-firefox
+   ```
+2. Clique em **"Carregar extensÃ£o temporÃ¡ria..."**.
+3. Selecione o arquivo **`dist/firefox/manifest.json`** (ou o arquivo **`dist/ready-to-roll-firefox.zip`**).
+4. Para publicar gratuitamente na loja oficial da Mozilla (AMO), basta fazer o upload de `dist/ready-to-roll-firefox.zip` no [addons.mozilla.org](https://addons.mozilla.org/developers/).
 
-### 📖 Commands and Notation Guide
+### 3. Na Web e Celular (Vercel / PWA)
+- **Deploy PrÃ³prio:** Conecte o repositÃ³rio no [Vercel](https://vercel.com). O arquivo `vercel.json` na raiz jÃ¡ configura tudo automaticamente com HTTPS gratuito.
+- **Auto-conexÃ£o via URL:** Acesse a URL com os parÃ¢metros da mesa:
+  ```text
+  https://seu-dominio.vercel.app/?sala=r2r-a8f2-9c41-7e3b&nome=Gimli
+  ```
+  O ReadyToRoll entrarÃ¡ imediatamente na mesa sem precisar de digitaÃ§Ã£o.
 
-The dice engine is extremely robust. Here is everything you and your players can type in the chat:
+---
 
-#### 1. Natural and Math Rolls
-You can type dice by themselves or in the middle of sentences:
-* `1d20` ➔ Rolls a 20-sided die.
-* `2d6 + 3` ➔ Rolls two 6-sided dice and adds 3 to the total.
-* `1d8 * 2` ➔ Rolls an 8-sided die and multiplies by 2.
-* `Sword attack! 1d20+4` ➔ Reads the sentence and rolls the dice automatically.
-* `[2d10 + 5]` ➔ Use brackets to isolate a very complex roll in the middle of messy text to ensure it's parsed correctly.
+## ðŸŽ² Guia de NotaÃ§Ãµes do Motor de Dados
 
-#### 2. Calculator Mode
-You can use the extension to solve basic math instantly by using the letter `r` before the equation:
-* `r 2+2` ➔ Returns `4`.
-* `r (10 * 2) / 4` ➔ Returns `5`.
-* `r 1d20 + 5` ➔ Rolls the dice and calculates everything (can also be used as a fallback command if the natural parser misses a strange format).
+O motor matemÃ¡tico do ReadyToRoll suporta notaÃ§Ãµes avanÃ§adas de RPG de mesa:
 
-#### 3. Advantage, Disadvantage (Keep and Drop)
-* `2d20kh1` ➔ Rolls 2d20 and **KEEPS THE HIGHEST** (Advantage).
-* `2d20kl1` ➔ Rolls 2d20 and **KEEPS THE LOWEST** (Disadvantage).
-* `4d6kh3` ➔ Rolls 4d6 and keeps the 3 highest (D&D Character Creation).
-* `4d6dl1` ➔ Rolls 4d6 and **DROPS THE LOWEST** (Same as above).
-* `4d6dh1` ➔ Rolls 4d6 and **DROPS THE HIGHEST**.
+| Comando | DescriÃ§Ã£o |
+| :--- | :--- |
+| `1d20+5 # Ataque Espada` | Rola 1d20 somando 5 com rÃ³tulo descritivo |
+| `2d20kh1+4 # Vantagem` | Rola dois d20 e mantÃ©m o maior (*Keep Highest*) |
+| `2d20kl1+2 # Desvantagem` | Rola dois d20 e mantÃ©m o menor (*Keep Lowest*) |
+| `4d6kh3` | Rola 4d6 e mantÃ©m os 3 maiores (geraÃ§Ã£o de atributos) |
+| `4d6dl1` | Rola 4d6 e descarta o menor (*Drop Lowest*) |
+| `1d10!` | Dado explosivo: rola outro dado adicional se tirar o valor mÃ¡ximo |
+| `1d6r<=2` | Re-rola o dado se o resultado for 1 ou 2 |
+| `(1d8+3)*2 + 1d4 # CrÃ­tico` | ExpressÃµes matemÃ¡ticas complexas com parÃªnteses |
+| `1d20+6, 2d6+3` | MÃºltiplas rolagens simultÃ¢neas separadas por vÃ­rgula |
 
-#### 4. Exploding Dice
-If a die rolls a specific target, an extra die is rolled and added to the total!
-* `4d6!` ➔ Explodes (rolls again) if the die hits the MAXIMUM value (6).
-* `4d6!>=5` ➔ Explodes if the value is greater than or equal to 5.
-* `4d6!L2` ➔ Explodes up to 2 times per die (explosion limit).
+---
 
-#### 5. Rerolls
-Reroll a die and drop the old result if a condition is met.
-* `4d6r1` ➔ Rerolls any die that lands on 1 (D&D Halfling Luck).
-* `4d6r<3` ➔ Rerolls values lower than 3.
-* `4d6r1L1` ➔ Rerolls 1s, but limits the reroll to a maximum of 1 time per die.
+## ðŸ› ï¸ Comandos de Desenvolvimento
+
+| Comando | DescriÃ§Ã£o |
+| :--- | :--- |
+| `npm run dev` | Inicia o servidor local de desenvolvimento Vite |
+| `npm run build` | Pipeline multi-target: compila `dist/chrome`, `dist/firefox`, `dist/web` e gera os zips |
+| `npm run test` | Executa a suÃ­te de testes unitÃ¡rios do motor de rolagem |
+| `.\publicar.ps1` | Script interativo PowerShell para versionamento e build local de distribuiÃ§Ã£o |
+| `.\icon.ps1` | Script PowerShell para redimensionar e atualizar os Ã­cones em todas as resoluÃ§Ãµes |
+
+---
+
+## ðŸ“„ LicenÃ§a
+
+DistribuÃ­do sob a licenÃ§a **MIT**. Consulte o arquivo [LICENSE](LICENSE) para obter mais informaÃ§Ãµes.

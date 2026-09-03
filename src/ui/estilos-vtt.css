@@ -1391,17 +1391,22 @@
     display: flex !important;
   }
 
-  /* Comportamento das Abas no Smartphone */
-  /* Aba 1: Dados */
+  /* Comportamento das Abas no Smartphone (< 640px) */
+  /* Aba 1: Dados & Histórico integrados juntos */
   .r2r-aba-ativa-dados #r2rSecaoConteudoRolagens {
-    display: none !important;
+    display: flex !important;
+    flex: 1 1 auto;
+    min-height: 140px;
+    overflow-y: auto;
   }
 
   .r2r-aba-ativa-dados #r2rSecaoAreaControle {
     display: flex !important;
-    flex: 1;
+    flex-shrink: 0;
+    max-height: 52%;
     overflow-y: auto;
-    padding-bottom: 12px;
+    padding-bottom: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .r2r-aba-ativa-dados #r2rAreaMacros {
@@ -1414,27 +1419,21 @@
     display: block !important;
   }
 
-  /* Aba 2: Histórico */
-  .r2r-aba-ativa-historico #r2rSecaoConteudoRolagens {
-    display: flex !important;
-    flex: 1;
-    min-height: 0;
-  }
-
-  .r2r-aba-ativa-historico #r2rSecaoAreaControle {
-    display: none !important;
-  }
-
-  /* Aba 3: Macros */
+  /* Aba 2: Macros (com histórico visível acima) */
   .r2r-aba-ativa-macros #r2rSecaoConteudoRolagens {
-    display: none !important;
+    display: flex !important;
+    flex: 1 1 auto;
+    min-height: 140px;
+    overflow-y: auto;
   }
 
   .r2r-aba-ativa-macros #r2rSecaoAreaControle {
     display: flex !important;
-    flex: 1;
+    flex-shrink: 0;
+    max-height: 52%;
     overflow-y: auto;
-    padding-bottom: 12px;
+    padding-bottom: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .r2r-aba-ativa-macros #r2rAreaMacros {

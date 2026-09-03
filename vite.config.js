@@ -1,8 +1,12 @@
-﻿import { defineConfig } from 'vite';
+import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import fs from 'fs';
 
 export default defineConfig({
+  server: {
+    host: true, // Escuta em 0.0.0.0 (rede local para acesso via celular)
+    port: 5173
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,

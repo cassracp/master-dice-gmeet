@@ -14,6 +14,7 @@ import {
 import {
   obterPerfilUsuario,
   salvarItem,
+  obterItem,
   obterUrlBaseWeb,
   salvarUrlBaseWeb,
   CHAVES,
@@ -238,12 +239,7 @@ export class JanelaVTT {
           <nav class="r2r-bottom-nav" id="r2rBottomNav">
             <button type="button" class="r2r-nav-tab ativo" data-aba="dados" id="r2rTabBtnDados">
               <span class="r2r-nav-icone">🎲</span>
-              <span class="r2r-nav-label">Dados</span>
-            </button>
-            <button type="button" class="r2r-nav-tab" data-aba="historico" id="r2rTabBtnHistorico">
-              <span class="r2r-nav-icone">📜</span>
-              <span class="r2r-nav-label">Histórico</span>
-              <span class="r2r-nav-badge" id="r2rBadgeHistorico" style="display: none;">0</span>
+              <span class="r2r-nav-label">Mesa & Dados</span>
             </button>
             <button type="button" class="r2r-nav-tab" data-aba="macros" id="r2rTabBtnMacros">
               <span class="r2r-nav-icone">⚡</span>
@@ -820,7 +816,7 @@ export class JanelaVTT {
     this.abaMobileAtiva = nomeAba;
     const painel = this.shadow.getElementById("r2rPainel");
     if (painel) {
-      painel.classList.remove("r2r-aba-ativa-dados", "r2r-aba-ativa-historico", "r2r-aba-ativa-macros");
+      painel.classList.remove("r2r-aba-ativa-dados", "r2r-aba-ativa-macros");
       painel.classList.add(`r2r-aba-ativa-${nomeAba}`);
     }
 
@@ -833,15 +829,8 @@ export class JanelaVTT {
       }
     });
 
-    if (nomeAba === "historico") {
-      this.rolagensNaoVistasMobile = 0;
-      const badgeMobile = this.shadow.getElementById("r2rBadgeHistorico");
-      if (badgeMobile) {
-        badgeMobile.style.display = "none";
-      }
-      if (this.componenteLog) {
-        this.componenteLog.rolarParaFinal();
-      }
+    if (this.componenteLog) {
+      if (typeof this.componenteLog.rolarParaFinal === "function") { this.componenteLog.rolarParaFinal(); }
     }
   }
 

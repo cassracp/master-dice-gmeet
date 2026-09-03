@@ -93,6 +93,13 @@ export class ComponenteLogRolagens {
     this.containerLista.scrollTop = this.containerLista.scrollHeight;
   }
 
+  
+  rolarParaFinal() {
+    if (this.containerLista) {
+      this.containerLista.scrollTop = this.containerLista.scrollHeight;
+    }
+  }
+
   limpar() {
     this.renderizarContainer();
   }

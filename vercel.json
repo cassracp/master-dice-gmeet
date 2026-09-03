@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "public": false,
   "buildCommand": "node scripts/construir.js",
   "outputDirectory": "dist/web",
   "cleanUrls": true,
@@ -23,4 +22,3 @@
     }
   ]
 }
-

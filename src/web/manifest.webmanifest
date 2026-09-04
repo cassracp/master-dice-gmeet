@@ -1,6 +1,6 @@
 {
-  "name": "ReadyToRoll (R2R) - Mesa Virtual de Dados",
-  "short_name": "ReadyToRoll",
+  "name": "Ready2Roll (R2R) - Mesa Virtual de Dados",
+  "short_name": "Ready2Roll",
   "description": "VTT ultraleve para rolagem de dados em tempo real com sincronização P2P WebRTC.",
   "start_url": "./",
   "display": "standalone",
@@ -8,6 +8,12 @@
   "theme_color": "#0b0f19",
   "orientation": "any",
   "icons": [
+    {
+      "src": "assets/icons/r2r_icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "assets/icon48.png",
       "sizes": "48x48",
@@ -17,6 +23,18 @@
     {
       "src": "assets/icon128.png",
       "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }

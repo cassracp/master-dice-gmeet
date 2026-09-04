@@ -1,15 +1,15 @@
-# publicar.ps1 - Pipeline de Publicação Local do ReadyToRoll (R2R)
+# publicar.ps1 - Pipeline de Publicação Local do Ready2Roll (R2R)
 param(
     [switch]$Help
 )
 
 if ($Help) {
-    Write-Host "Script interativo para compilar, testar e empacotar localmente versões do ReadyToRoll (R2R)."
+    Write-Host "Script interativo para compilar, testar e empacotar localmente versões do Ready2Roll (R2R)."
     exit
 }
 
 Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host "   ReadyToRoll (R2R) - Publicador Local  " -ForegroundColor Cyan
+Write-Host "   Ready2Roll (R2R) - Publicador Local  " -ForegroundColor Cyan
 Write-Host "=========================================`n" -ForegroundColor Cyan
 
 # 1. Solicita a versão

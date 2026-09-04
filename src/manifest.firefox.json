@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "ReadyToRoll (R2R) - Virtual Tabletop de Dados",
+  "name": "Ready2Roll (R2R) - Virtual Tabletop de Dados",
   "version": "2.0.0",
   "description": "VTT ultraleve para rolagem de dados em tempo real via P2P WebRTC no Google Meet e em qualquer página web.",
   "browser_specific_settings": {
@@ -14,14 +14,10 @@
     "48": "assets/icon48.png",
     "128": "assets/icon128.png"
   },
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting"
-  ],
+  "permissions": ["activeTab", "storage", "scripting"],
   "sidebar_action": {
     "default_panel": "standalone/index.html",
-    "default_title": "ReadyToRoll (R2R)",
+    "default_title": "Ready2Roll (R2R)",
     "default_icon": {
       "16": "assets/icon16.png",
       "48": "assets/icon48.png",
@@ -33,7 +29,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Abrir ReadyToRoll (R2R)",
+    "default_title": "Abrir Ready2Roll (R2R)",
     "default_icon": {
       "16": "assets/icon16.png",
       "48": "assets/icon48.png",
@@ -46,25 +42,19 @@
         "default": "Alt+R",
         "mac": "Alt+R"
       },
-      "description": "Alternar ReadyToRoll VTT"
+      "description": "Alternar Ready2Roll VTT"
     }
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://meet.google.com/*"
-      ],
+      "matches": ["https://meet.google.com/*"],
       "js": ["content/injetor.js"],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "assets/*",
-        "content/*",
-        "standalone/*"
-      ],
+      "resources": ["assets/*", "content/*", "standalone/*"],
       "matches": ["<all_urls>"]
     }
   ]

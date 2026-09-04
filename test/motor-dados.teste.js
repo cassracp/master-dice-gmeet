@@ -1,7 +1,7 @@
 /**
  * Testes automatizados para motor-dados.js
  */
-import { executarRolagem, executarMultiplasRolagens } from '../src/core/motor-dados.js';
+import { executarRolagem, executarMultiplasRolagens, extrairNotacoes3D } from '../src/core/motor-dados.js';
 
 function afirmar(condicao, mensagem) {
   if (!condicao) {
@@ -42,4 +42,31 @@ const multi = executarMultiplasRolagens('1d20+4 # Teste, 2d6+2 # Dano');
 afirmar(multi.length === 2, 'Deve processar duas rolagens');
 afirmar(multi[0].rotulo === 'Teste' && multi[1].rotulo === 'Dano', 'Rótulos múltiplos devem bater');
 
+// Teste 7: Extração de notações para o motor 3D
+const notacoes3d = extrairNotacoes3D('2d8 + 1d6 + 3 # Ataque');
+afirmar(notacoes3d.length === 2 && notacoes3d[0] === '2d8' && notacoes3d[1] === '1d6', 'extrairNotacoes3D deve extrair 2d8 e 1d6');
+
+const notacoesKh = extrairNotacoes3D('4d6kh3');
+afirmar(notacoesKh.length === 1 && notacoesKh[0] === '4d6', 'extrairNotacoes3D deve extrair 4d6 para 4d6kh3');
+
+// Teste 8: Execução com valores pré-determinados do motor 3D (coerência física/histórico)
+const resultadoSincronizado = executarRolagem('1d20+5', {
+  valoresPredefinidos: [{ sides: 20, value: 17 }]
+});
+afirmar(resultadoSincronizado.total === 22, '1d20+5 com dado 3D em 17 deve totalizar exatamente 22');
+afirmar(resultadoSincronizado.gruposDados[0].valoresAtivos[0] === 17, 'Valor ativo do d20 deve ser exatamente 17');
+
+// Teste 9: Keep Highest com valores 3D predefinidos
+const resultadoKhSincronizado = executarRolagem('4d6kh3', {
+  valoresPredefinidos: [
+    { sides: 6, value: 6 },
+    { sides: 6, value: 4 },
+    { sides: 6, value: 2 },
+    { sides: 6, value: 1 }
+  ]
+});
+afirmar(resultadoKhSincronizado.total === 12, '4d6kh3 [6,4,2,1] deve somar 12 (6+4+2)');
+afirmar(resultadoKhSincronizado.gruposDados[0].valoresDescartados[0] === 1, 'Dado descartado deve ser exatamente 1');
+
 console.log('--- Todos os testes do motor-dados passaram com êxito! ---');
+

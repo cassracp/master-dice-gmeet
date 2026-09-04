@@ -5,7 +5,12 @@ import fs from 'fs';
 export default defineConfig({
   server: {
     host: true, // Escuta em 0.0.0.0 (rede local para acesso via celular)
-    port: 5173
+    port: 5173,
+    // Middleware e configurações de servidor
+    middlewareMode: false,
+    fs: {
+      strict: false,
+    },
   },
   build: {
     outDir: 'dist',

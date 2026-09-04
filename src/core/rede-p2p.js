@@ -194,8 +194,9 @@ export class GerenciadorRedeP2P {
    * @param {object} dadosRolagem 
    * @param {'publica'|'direcionada'|'privada'} visibilidade 
    * @param {string[]} [destinatariosPeerIds=[]] 
+   * @param {boolean} [tocarSomLocal=true]
    */
-  transmitirRolagem(dadosRolagem, visibilidade = 'publica', destinatariosPeerIds = []) {
+  transmitirRolagem(dadosRolagem, visibilidade = 'publica', destinatariosPeerIds = [], tocarSomLocal = true) {
     const idRolagem = `r2r-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     const pacoteRolagem = {
       id: idRolagem,
@@ -213,8 +214,8 @@ export class GerenciadorRedeP2P {
       salvarHistoricoSala(this.codigoSalaAtual, this.historicoSessao);
     }
 
-    // Emite imediatamente para a UI local do autor
-    this.aoReceberRolagem(pacoteRolagem, true);
+    // Emite para a UI local do autor
+    this.aoReceberRolagem(pacoteRolagem, Boolean(tocarSomLocal));
 
     // Se for privada, encerra aqui (não transmite para ninguém)
     if (visibilidade === 'privada') {

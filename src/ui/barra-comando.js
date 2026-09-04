@@ -2,7 +2,7 @@
  * barra-comando.js - Linha de Comando de Rolagem com Histórico (Setas Cima/Baixo)
  */
 
-import { definirHTML } from './utilitarios-dom.js';
+import { definirHTML, obterUrlRecurso } from './utilitarios-dom.js';
 
 export class ComponenteBarraComando {
   /**
@@ -30,7 +30,7 @@ export class ComponenteBarraComando {
         />
         <button type="submit" class="r2r-btn-enviar" title="Rolar (Enter)">
           <span>Rolar</span>
-          <span>🎲</span>
+          <span style="display: flex; align-items: center;"><img src="${obterUrlRecurso('assets/icons/000000/transparent/1x1/lorc/cubes.svg')}" alt="Rolar" style="width:16px;height:16px;filter:invert(1);" onerror="if(!this.dataset.tentou){this.dataset.tentou='1';this.src=this.src.includes('/src/')?'./assets/icons/000000/transparent/1x1/lorc/cubes.svg':'/src/assets/icons/000000/transparent/1x1/lorc/cubes.svg';}"></span>
         </button>
       </form>
     `);

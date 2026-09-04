@@ -1,37 +1,40 @@
 /**
- * armazenamento.js - Camada Unificada de Persistência para o ReadyToRoll (R2R)
- * 
+ * armazenamento.js - Camada Unificada de Persistência para o Ready2Roll (R2R)
+ *
  * Abstrai chrome.storage.local com fallback transparente para localStorage,
  * permitindo que os mesmos módulos rodem tanto na extensão quanto no navegador web.
  */
 
 const CHAVES = {
-  NOME_USUARIO: 'r2r_nome_usuario',
-  ULTIMA_SALA: 'r2r_ultima_sala',
-  MACROS: 'r2r_macros',
-  SOM_HABILITADO: 'r2r_som_habilitado',
-  HISTORICO_LOCAL: 'r2r_historico_local',
-  POSICAO_JANELA: 'r2r_posicao_janela',
-  MODO_EXIBICAO: 'r2r_modo_exibicao',
-  LARGURA_LATERAL: 'r2r_largura_lateral',
-  POSICAO_DOCK: 'r2r_posicao_dock',
-  NOME_SALA_ATUAL: 'r2r_nome_sala_atual',
-  SESSAO_ATIVA: 'r2r_sessao_ativa',
-  URL_BASE_WEB: 'r2r_url_base_web'
+  NOME_USUARIO: "r2r_nome_usuario",
+  ULTIMA_SALA: "r2r_ultima_sala",
+  MACROS: "r2r_macros",
+  SOM_HABILITADO: "r2r_som_habilitado",
+  HISTORICO_LOCAL: "r2r_historico_local",
+  POSICAO_JANELA: "r2r_posicao_janela",
+  MODO_EXIBICAO: "r2r_modo_exibicao",
+  LARGURA_LATERAL: "r2r_largura_lateral",
+  POSICAO_DOCK: "r2r_posicao_dock",
+  NOME_SALA_ATUAL: "r2r_nome_sala_atual",
+  SESSAO_ATIVA: "r2r_sessao_ativa",
+  URL_BASE_WEB: "r2r_url_base_web",
 };
 
-export const URL_WEB_PADRAO = 'https://ready-to-roll-vtt.vercel.app';
-
+export const URL_WEB_PADRAO = "https://ready-to-roll-vtt.vercel.app";
 
 /**
  * Obtém valor armazenado.
- * @param {string} chave 
- * @param {*} valorPadrao 
+ * @param {string} chave
+ * @param {*} valorPadrao
  * @returns {Promise<*>}
  */
 export async function obterItem(chave, valorPadrao = null) {
   try {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.local
+    ) {
       return new Promise((resolve) => {
         chrome.storage.local.get([chave], (resultado) => {
           if (resultado && resultado[chave] !== undefined) {
@@ -41,35 +44,39 @@ export async function obterItem(chave, valorPadrao = null) {
           }
         });
       });
-    } else if (typeof localStorage !== 'undefined') {
+    } else if (typeof localStorage !== "undefined") {
       const salvo = localStorage.getItem(chave);
       if (salvo !== null) {
         return JSON.parse(salvo);
       }
     }
   } catch (erro) {
-    console.warn(`[ReadyToRoll] Falha ao recuperar chave "${chave}":`, erro);
+    console.warn(`[Ready2Roll] Falha ao recuperar chave "${chave}":`, erro);
   }
   return valorPadrao;
 }
 
 /**
  * Salva valor de forma assíncrona.
- * @param {string} chave 
- * @param {*} valor 
+ * @param {string} chave
+ * @param {*} valor
  * @returns {Promise<void>}
  */
 export async function salvarItem(chave, valor) {
   try {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.local
+    ) {
       return new Promise((resolve) => {
         chrome.storage.local.set({ [chave]: valor }, () => resolve());
       });
-    } else if (typeof localStorage !== 'undefined') {
+    } else if (typeof localStorage !== "undefined") {
       localStorage.setItem(chave, JSON.stringify(valor));
     }
   } catch (erro) {
-    console.warn(`[ReadyToRoll] Falha ao salvar chave "${chave}":`, erro);
+    console.warn(`[Ready2Roll] Falha ao salvar chave "${chave}":`, erro);
   }
 }
 
@@ -77,19 +84,27 @@ export async function salvarItem(chave, valor) {
  * Recupera o perfil do usuário ou gera um padrão.
  */
 export async function obterPerfilUsuario() {
-  let nome = await obterItem(CHAVES.NOME_USUARIO, '');
+  let nome = await obterItem(CHAVES.NOME_USUARIO, "");
   if (!nome) {
     const sufixo = Math.floor(1000 + Math.random() * 9000);
     nome = `Participante-${sufixo}`;
     await salvarItem(CHAVES.NOME_USUARIO, nome);
   }
-  const ultimaSala = await obterItem(CHAVES.ULTIMA_SALA, '');
+  const ultimaSala = await obterItem(CHAVES.ULTIMA_SALA, "");
   const som = await obterItem(CHAVES.SOM_HABILITADO, true);
-  const modoExibicao = await obterItem(CHAVES.MODO_EXIBICAO, 'flutuante');
+  const modoExibicao = await obterItem(CHAVES.MODO_EXIBICAO, "flutuante");
   const larguraLateral = await obterItem(CHAVES.LARGURA_LATERAL, 390);
   const posicaoDock = await obterItem(CHAVES.POSICAO_DOCK, null);
-  const ultimoNomeSala = await obterItem(CHAVES.NOME_SALA_ATUAL, '');
-  return { nome, ultimaSala, som, modoExibicao, larguraLateral, posicaoDock, ultimoNomeSala };
+  const ultimoNomeSala = await obterItem(CHAVES.NOME_SALA_ATUAL, "");
+  return {
+    nome,
+    ultimaSala,
+    som,
+    modoExibicao,
+    larguraLateral,
+    posicaoDock,
+    ultimoNomeSala,
+  };
 }
 
 /**
@@ -103,7 +118,7 @@ export async function obterMacros() {
   // Limpa eventuais presets legados persistidos para que o usuário comece limpo
   const temApenasPresetsLegados =
     macros.length > 0 &&
-    macros.every((m) => ['m-1', 'm-2', 'm-3', 'm-4', 'm-5'].includes(m.id));
+    macros.every((m) => ["m-1", "m-2", "m-3", "m-4", "m-5"].includes(m.id));
   if (temApenasPresetsLegados) {
     await salvarItem(CHAVES.MACROS, []);
     return [];
@@ -113,7 +128,7 @@ export async function obterMacros() {
 
 /**
  * Salva lista de macros.
- * @param {Array<{id: string, nome: string, comando: string}>} macros 
+ * @param {Array<{id: string, nome: string, comando: string}>} macros
  */
 export async function salvarMacros(macros) {
   await salvarItem(CHAVES.MACROS, macros);
@@ -121,7 +136,7 @@ export async function salvarMacros(macros) {
 
 /**
  * Recupera histórico local persistido de uma sala específica.
- * @param {string} codigoSala 
+ * @param {string} codigoSala
  * @returns {Promise<Array>}
  */
 export async function obterHistoricoSala(codigoSala) {
@@ -132,8 +147,8 @@ export async function obterHistoricoSala(codigoSala) {
 
 /**
  * Persiste histórico de rolagens de uma sala específica (mantém as últimas 100 rolagens).
- * @param {string} codigoSala 
- * @param {Array} historico 
+ * @param {string} codigoSala
+ * @param {Array} historico
  */
 export async function salvarHistoricoSala(codigoSala, historico) {
   if (!codigoSala || !Array.isArray(historico)) return;
@@ -148,18 +163,19 @@ export async function salvarHistoricoSala(codigoSala, historico) {
  */
 export async function obterUrlBaseWeb() {
   const url = await obterItem(CHAVES.URL_BASE_WEB, URL_WEB_PADRAO);
-  return (url && typeof url === 'string') ? url.trim().replace(/\/$/, '') : URL_WEB_PADRAO;
+  return url && typeof url === "string"
+    ? url.trim().replace(/\/$/, "")
+    : URL_WEB_PADRAO;
 }
 
 /**
  * Salva a URL base web configurada.
- * @param {string} url 
+ * @param {string} url
  */
 export async function salvarUrlBaseWeb(url) {
-  if (url && typeof url === 'string') {
-    await salvarItem(CHAVES.URL_BASE_WEB, url.trim().replace(/\/$/, ''));
+  if (url && typeof url === "string") {
+    await salvarItem(CHAVES.URL_BASE_WEB, url.trim().replace(/\/$/, ""));
   }
 }
 
 export { CHAVES };
-

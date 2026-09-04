@@ -1,12 +1,12 @@
 /**
  * gerenciador-macros.js - Gerenciador de Botões e Atalhos Personalizados (Macros)
  * 
- * Fornece interface compacta em Listbox com ações dedicadas para rolar,
- * editar, excluir e criar novos atalhos de rolagem de dados.
+ * Fornece interface com lista de botões grandes para rolar e editar macros.
  */
 
 import { obterMacros, salvarMacros } from '../core/armazenamento.js';
 import { definirHTML } from './utilitarios-dom.js';
+import { createIcons, Pencil, Plus, Trash2 } from 'lucide';
 
 function escaparHTML(texto) {
   if (!texto) return '';
@@ -18,6 +18,8 @@ function escaparHTML(texto) {
     .replace(/'/g, '&#039;');
 }
 
+const iconeCubes = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="24" height="24"><path d="M388.53 21.53c-38.006 30.546-63.492 66.122-83.952 103.687a508.13 508.13 0 0 0 38.516 21.38l88.744 34.04a512.855 512.855 0 0 0 41.51 9.625c13.493-42.908 19.872-85.824 19.433-128.73l-104.25-40zm-266.813 3.88 15.133 64.967 68.95 16.38-12.993-64.525-71.09-16.822zm-17.594 6.848L66.896 79.803l12.358 62.025 39.494-46.785-14.625-62.785zm27.783 76.148-37.094 43.97 52.165 7.718a738.183 738.183 0 0 1 21.716-5.967l27.62-30.408-64.407-15.314zm170.57 37.346 8.776 58.912c5.91 6.06 11.636 12.256 17.13 18.615l89.024 34.157 45.317-50.218c-54.72-11.1-108.31-30.82-160.248-61.468zm-70.09 13.482c-49.324 9.35-98.335 21.9-147.224 42.645 40.825 34.878 76.848 72.364 105.988 113.538l149.204-44.686c-26.533-41.862-66.002-77.02-107.97-111.498zM65.71 209.848C45.093 260.13 28.07 311.115 24.24 367.025c24.535 52.892 70.202 90.623 110.764 119.72l42.476-158.45c-29.975-42.853-68.05-81.942-111.77-118.447zm285.36 77.182-155.68 46.63-42.146 157.22c52.167-7.854 103.99-21.873 155.822-48.26 24.952-53.52 30.504-99.728 42.002-155.587z"/></svg>`;
+
 export class ComponenteGerenciadorMacros {
   /**
    * @param {HTMLElement} elementoPai 
@@ -27,7 +29,6 @@ export class ComponenteGerenciadorMacros {
     this.elementoPai = elementoPai;
     this.aoRolarMacro = aoRolarMacro;
     this.macros = [];
-    this.macroSelecionadaId = null;
 
     this.carregarMacros();
   }
@@ -37,106 +38,85 @@ export class ComponenteGerenciadorMacros {
    */
   async carregarMacros() {
     this.macros = await obterMacros();
-    if (this.macros.length > 0 && !this.macroSelecionadaId) {
-      this.macroSelecionadaId = this.macros[0].id;
-    }
     this.renderizar();
   }
 
   /**
-   * Renderiza o Listbox de macros e os botões de ação.
+   * Renderiza a lista de macros.
    */
   renderizar() {
     const temMacros = this.macros.length > 0;
 
-    // Se o ID selecionado não existir mais, seleciona o primeiro item disponível
-    if (temMacros && (!this.macroSelecionadaId || !this.macros.some(m => m.id === this.macroSelecionadaId))) {
-      this.macroSelecionadaId = this.macros[0].id;
-    } else if (!temMacros) {
-      this.macroSelecionadaId = null;
+    let htmlLista = '';
+    if (temMacros) {
+      htmlLista = this.macros.map(m => `
+        <div class="r2r-item-macro">
+          <div class="r2r-info-macro">
+            <span class="r2r-nome-macro">${escaparHTML(m.nome)}</span>
+            <span class="r2r-cmd-macro">${escaparHTML(m.comando)}</span>
+          </div>
+          <div class="r2r-acoes-macro">
+            <button class="r2r-btn-editar-macro-item" data-id="${escaparHTML(m.id)}" title="Editar macro">
+              <i data-lucide="pencil"></i>
+            </button>
+            <button class="r2r-btn-rolar-macro-item" data-id="${escaparHTML(m.id)}" title="Rolar macro">
+              ${iconeCubes}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      htmlLista = `
+        <div style="text-align: center; padding: 20px 10px; color: var(--r2r-texto-mutado); font-size: 12px;">
+          Nenhuma macro cadastrada.<br>Crie atalhos para suas rolagens frequentes!
+        </div>
+      `;
     }
 
-    const temSelecao = Boolean(this.macroSelecionadaId);
-
     definirHTML(this.elementoPai, `
-      <div class="r2r-linha-macros">
-        <div class="r2r-seletor-macro-wrap">
-          <select class="r2r-select-macro" id="r2rSelectMacro" aria-label="Selecione uma macro de rolagem">
-            ${!temMacros ? `
-              <option value="" disabled selected>Nenhuma macro cadastrada</option>
-            ` : this.macros.map(m => `
-              <option value="${escaparHTML(m.id)}" ${m.id === this.macroSelecionadaId ? 'selected' : ''}>
-                ${escaparHTML(m.nome)} (${escaparHTML(m.comando)})
-              </option>
-            `).join('')}
-          </select>
-        </div>
-
-        <div class="r2r-acoes-macros">
-          <button class="r2r-btn-macro-acao r2r-btn-rolar-macro" id="r2rBtnRolarMacro" title="Rolar macro selecionada" ${!temSelecao ? 'disabled' : ''}>
-            <span>🎲</span>
-          </button>
-          <button class="r2r-btn-macro-acao r2r-btn-editar-macro" id="r2rBtnEditarMacro" title="Editar macro selecionada" ${!temSelecao ? 'disabled' : ''}>
-            <span>✏️</span>
-          </button>
-          <button class="r2r-btn-macro-acao r2r-btn-excluir-macro" id="r2rBtnExcluirMacro" title="Excluir macro selecionada" ${!temSelecao ? 'disabled' : ''}>
-            <span>🗑️</span>
-          </button>
-          <button class="r2r-btn-macro-acao r2r-btn-novo-macro" id="r2rBtnNovoMacro" title="Criar nova macro">
-            <span>➕</span>
-          </button>
-        </div>
+      <div class="r2r-lista-macros">
+        ${htmlLista}
+        <button class="r2r-btn-novo-macro-grande" id="r2rBtnNovoMacro">
+          <i data-lucide="plus"></i> Criar Nova Macro
+        </button>
       </div>
       <div class="r2r-container-modal-macro" style="display: none;"></div>
     `);
 
-    // Vincular alteração do select
-    const select = this.elementoPai.querySelector('#r2rSelectMacro');
-    if (select) {
-      select.addEventListener('change', (e) => {
-        this.macroSelecionadaId = e.target.value;
-        this.atualizarEstadoBotoes();
-      });
-    }
+    // Inicializar ícones do Lucide
+    createIcons({
+      icons: { Pencil, Plus, Trash2 },
+      attrs: {
+        width: 18,
+        height: 18
+      },
+      nameAttr: 'data-lucide',
+      root: this.elementoPai
+    });
 
     // Ação: Rolar Macro
-    const btnRolar = this.elementoPai.querySelector('#r2rBtnRolarMacro');
-    if (btnRolar) {
-      btnRolar.addEventListener('click', () => {
-        const macro = this.macros.find(m => m.id === this.macroSelecionadaId);
+    const botoesRolar = this.elementoPai.querySelectorAll('.r2r-btn-rolar-macro-item');
+    botoesRolar.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const macro = this.macros.find(m => m.id === id);
         if (macro && this.aoRolarMacro) {
           this.aoRolarMacro(macro.comando);
         }
       });
-    }
+    });
 
     // Ação: Editar Macro
-    const btnEditar = this.elementoPai.querySelector('#r2rBtnEditarMacro');
-    if (btnEditar) {
-      btnEditar.addEventListener('click', () => {
-        const macro = this.macros.find(m => m.id === this.macroSelecionadaId);
+    const botoesEditar = this.elementoPai.querySelectorAll('.r2r-btn-editar-macro-item');
+    botoesEditar.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const macro = this.macros.find(m => m.id === id);
         if (macro) {
           this.abrirModalMacro(macro);
         }
       });
-    }
-
-    // Ação: Excluir Macro
-    const btnExcluir = this.elementoPai.querySelector('#r2rBtnExcluirMacro');
-    if (btnExcluir) {
-      btnExcluir.addEventListener('click', async () => {
-        const macro = this.macros.find(m => m.id === this.macroSelecionadaId);
-        if (!macro) return;
-
-        const confirmar = confirm(`Deseja realmente excluir a macro "${macro.nome}"?`);
-        if (!confirmar) return;
-
-        this.macros = this.macros.filter(m => m.id !== macro.id);
-        this.macroSelecionadaId = this.macros.length > 0 ? this.macros[0].id : null;
-        await salvarMacros(this.macros);
-        this.renderizar();
-      });
-    }
+    });
 
     // Ação: Criar Nova Macro
     const btnNovo = this.elementoPai.querySelector('#r2rBtnNovoMacro');
@@ -145,20 +125,6 @@ export class ComponenteGerenciadorMacros {
         this.abrirModalMacro(null);
       });
     }
-  }
-
-  /**
-   * Atualiza o estado de ativação dos botões sem necessidade de re-renderizar todo o DOM.
-   */
-  atualizarEstadoBotoes() {
-    const temSelecao = Boolean(this.macroSelecionadaId && this.macros.some(m => m.id === this.macroSelecionadaId));
-    const btnRolar = this.elementoPai.querySelector('#r2rBtnRolarMacro');
-    const btnEditar = this.elementoPai.querySelector('#r2rBtnEditarMacro');
-    const btnExcluir = this.elementoPai.querySelector('#r2rBtnExcluirMacro');
-
-    if (btnRolar) btnRolar.disabled = !temSelecao;
-    if (btnEditar) btnEditar.disabled = !temSelecao;
-    if (btnExcluir) btnExcluir.disabled = !temSelecao;
   }
 
   /**
@@ -194,13 +160,32 @@ export class ComponenteGerenciadorMacros {
             <input type="text" class="r2r-input-comando r2r-input-cmd-macro" placeholder="Ex: 1d20+3 # Iniciativa" value="${escaparHTML(valorComando)}" />
           </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
-            <button class="r2r-btn-visibilidade r2r-btn-cancelar-modal" style="padding: 6px 12px;">Cancelar</button>
-            <button class="r2r-btn-enviar r2r-btn-salvar-macro" style="padding: 6px 14px;">Salvar</button>
+          <div style="display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;">
+            <div>
+              ${ehEdicao ? `
+                <button class="r2r-btn-excluir-macro-modal" title="Excluir Macro">
+                  <i data-lucide="trash-2"></i> Excluir
+                </button>
+              ` : '<div></div>'}
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="r2r-btn-visibilidade r2r-btn-cancelar-modal" style="padding: 6px 12px;">Cancelar</button>
+              <button class="r2r-btn-enviar r2r-btn-salvar-macro" style="padding: 6px 14px;">Salvar</button>
+            </div>
           </div>
         </div>
       </div>
     `);
+
+    // Renderizar ícone da lixeira no modal
+    if (ehEdicao) {
+      createIcons({
+        icons: { Trash2 },
+        attrs: { width: 16, height: 16 },
+        nameAttr: 'data-lucide',
+        root: modalContainer
+      });
+    }
 
     const fechar = () => {
       modalContainer.style.display = 'none';
@@ -212,6 +197,19 @@ export class ComponenteGerenciadorMacros {
 
     modalContainer.querySelector('.r2r-btn-fechar-modal').addEventListener('click', fechar);
     modalContainer.querySelector('.r2r-btn-cancelar-modal').addEventListener('click', fechar);
+
+    // Ação: Excluir Macro
+    if (ehEdicao) {
+      modalContainer.querySelector('.r2r-btn-excluir-macro-modal').addEventListener('click', async () => {
+        const confirmar = confirm(`Deseja realmente excluir a macro "${macroParaEditar.nome}"?`);
+        if (!confirmar) return;
+
+        this.macros = this.macros.filter(m => m.id !== macroParaEditar.id);
+        await salvarMacros(this.macros);
+        fechar();
+        this.renderizar();
+      });
+    }
 
     const salvarAcao = async () => {
       const nome = inputNome.value.trim();
@@ -225,7 +223,6 @@ export class ComponenteGerenciadorMacros {
       if (ehEdicao) {
         macroParaEditar.nome = nome;
         macroParaEditar.comando = comando;
-        this.macroSelecionadaId = macroParaEditar.id;
       } else {
         const novaMacro = {
           id: `macro-${Date.now()}`,
@@ -233,7 +230,6 @@ export class ComponenteGerenciadorMacros {
           comando
         };
         this.macros.push(novaMacro);
-        this.macroSelecionadaId = novaMacro.id;
       }
 
       await salvarMacros(this.macros);

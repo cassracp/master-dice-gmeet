@@ -1,9 +1,9 @@
 /**
- * app-web.js - Inicializador do ReadyToRoll (R2R) na Web (PWA / Vercel / Celular)
+ * app-web.js - Inicializador do Ready2Roll (R2R) na Web (PWA / Vercel / Celular)
  */
 
-import { JanelaVTT } from '../ui/janela-vtt.js';
-import cssTexto from '../ui/estilos-vtt.css?inline';
+import { JanelaVTT } from "../ui/janela-vtt.js";
+import cssTexto from "../ui/estilos-vtt.css?inline";
 
 // Regras de estilo para ocupar a tela cheia no modo Web App / Smartphone
 const cssModoWeb = `
@@ -19,8 +19,8 @@ const cssModoWeb = `
   }
 `;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('r2r-web-app');
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("r2r-web-app");
   if (container) {
     const vtt = new JanelaVTT(container, { ehModoPopUp: true });
     vtt.inicializar(cssModoWeb);

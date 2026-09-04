@@ -1,7 +1,7 @@
 {
   "name": "ready-to-roll-vtt",
   "version": "2.0.0",
-  "description": "ReadyToRoll (R2R) - VTT leve para rolagem de dados em tempo real via P2P WebRTC",
+  "description": "Ready2Roll (R2R) - VTT leve para rolagem de dados em tempo real via P2P WebRTC",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
@@ -16,9 +16,11 @@
     "webrtc",
     "p2p"
   ],
-  "author": "ReadyToRoll Team",
+  "author": "Ready2Roll Team",
   "license": "MIT",
   "dependencies": {
+    "@3d-dice/dice-box": "^1.1.4",
+    "lucide": "^1.40.0",
     "qrcode": "^1.5.4",
     "trystero": "^0.20.1"
   },
@@ -27,4 +29,3 @@
     "vite": "^5.4.14"
   }
 }
-

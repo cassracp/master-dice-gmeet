@@ -2,7 +2,7 @@
  * log-rolagens.js - Feed em Tempo Real de Rolagens com Destaques Críticos
  */
 
-import { definirHTML } from './utilitarios-dom.js';
+import { definirHTML, obterUrlRecurso } from './utilitarios-dom.js';
 
 export class ComponenteLogRolagens {
   /**
@@ -18,7 +18,7 @@ export class ComponenteLogRolagens {
     definirHTML(this.elementoPai, `
       <div class="r2r-historico-rolagens">
         <div class="r2r-mensagem-vazia" style="text-align: center; color: var(--r2r-texto-mutado); padding: 30px 10px; font-size: 13px;">
-          <span>🎲 Nenhuma rolagem nesta sessão ainda.</span><br/>
+          <span style="display:inline-flex; align-items:center; gap:4px;"><img src="${obterUrlRecurso('assets/icons/000000/transparent/1x1/lorc/cubes.svg')}" alt="Dados" style="width:16px;height:16px;filter:invert(1);" onerror="if(!this.dataset.tentou){this.dataset.tentou='1';this.src=this.src.includes('/src/')?'./assets/icons/000000/transparent/1x1/lorc/cubes.svg':'/src/assets/icons/000000/transparent/1x1/lorc/cubes.svg';}"> Nenhuma rolagem nesta sessão ainda.</span><br/>
           <span style="font-size: 11px;">Role um dado acima ou use a barra de comandos!</span>
         </div>
       </div>

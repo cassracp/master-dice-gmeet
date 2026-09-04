@@ -1,9 +1,9 @@
 /**
- * app.js - Inicializador do ReadyToRoll em modo Janela Independente (Pop-up) / Web Companion
+ * app.js - Inicializador do Ready2Roll em modo Janela Independente (Pop-up) / Web Companion
  */
 
-import { JanelaVTT } from '../ui/janela-vtt.js';
-import cssTexto from '../ui/estilos-vtt.css?inline';
+import { JanelaVTT } from "../ui/janela-vtt.js";
+import cssTexto from "../ui/estilos-vtt.css?inline";
 
 // Regras adicionais de CSS para ocupar 100% da janela pop-up
 const cssModoPopUp = `
@@ -19,8 +19,8 @@ const cssModoPopUp = `
   }
 `;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('r2r-standalone-app');
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("r2r-standalone-app");
   if (container) {
     const vtt = new JanelaVTT(container, { ehModoPopUp: true });
     vtt.inicializar(cssModoPopUp);

@@ -13,6 +13,8 @@ let contextoAudio = null;
 let bufferAudioDecodificado = null;
 let promessaDecodificacao = null;
 let somHabilitado = true;
+let ultimoMomentoReproducaoRolagem = 0;
+const INTERVALO_MINIMO_REPRODUCAO_MS = 1200;
 
 /**
  * Obtém ou inicializa o AudioContext global após interação do usuário.
@@ -32,7 +34,7 @@ function obterContextoAudio() {
 }
 
 /**
- * Converte a string base64 do áudio MP3 em um ArrayBuffer nativo.
+ * Converte a string base64 do áudio MP3 em um ArrayBuffer para decodificação nativa.
  * @returns {ArrayBuffer}
  */
 function obterArrayBufferAudio() {
@@ -46,7 +48,7 @@ function obterArrayBufferAudio() {
 }
 
 /**
- * Pré-decodifica o áudio MP3 na memória para reprodução instantânea com zero latência.
+ * Retorna o AudioBuffer decodificado, usando cache em memória para reprodução instantânea.
  * @param {AudioContext} ctx 
  * @returns {Promise<AudioBuffer|null>}
  */
@@ -119,8 +121,18 @@ function tocarImpactoProcedural(ctx) {
  * @param {number} [_quantidadeImpactos=4] Parâmetro mantido por compatibilidade.
  */
 export async function tocarSomRolagem(_quantidadeImpactos = 4) {
+  // Ignora se a aba estiver em segundo plano para evitar ecos entre múltiplas abas
+  if (typeof document !== 'undefined' && document.hidden) return;
+
   dispararFeedbackHaptico([15, 35, 20]);
   if (!somHabilitado) return;
+
+  // Trava de segurança contra disparos repetidos em rajada / ecos de rede
+  const agoraMs = Date.now();
+  if (agoraMs - ultimoMomentoReproducaoRolagem < INTERVALO_MINIMO_REPRODUCAO_MS) {
+    return;
+  }
+  ultimoMomentoReproducaoRolagem = agoraMs;
 
   try {
     const ctx = obterContextoAudio();

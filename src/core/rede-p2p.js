@@ -176,7 +176,11 @@ export class GerenciadorRedeP2P {
           if (this.codigoSalaAtual) {
             salvarHistoricoSala(this.codigoSalaAtual, this.historicoSessao);
           }
-          this.aoReceberRolagem(rolagem, true); // true = tocar efeito sonoro
+          // Só toca som se a rolagem não for do próprio autor local (evita som duplo em multi-abas)
+          const ehDoProprioAutor =
+            rolagem.autorId === this.meuPerfil.id ||
+            (rolagem.autor && rolagem.autor === this.meuPerfil.nome);
+          this.aoReceberRolagem(rolagem, !ehDoProprioAutor);
         }
       });
 

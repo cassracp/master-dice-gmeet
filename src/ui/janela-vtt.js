@@ -809,7 +809,12 @@ export class JanelaVTT {
     this.rede.aoReceberRolagem = (pacoteRolagem, tocarSom) => {
       this.componenteLog.adicionarRolagem(pacoteRolagem);
 
-      if (tocarSom) {
+      // Só toca som se for explicitamente solicitado E o autor não for o próprio usuário local
+      const ehDoProprioAutor =
+        pacoteRolagem?.autorId === this.rede.meuPerfil.id ||
+        (pacoteRolagem?.autor && pacoteRolagem?.autor === this.perfil.nome);
+
+      if (tocarSom && !ehDoProprioAutor) {
         tocarSomRolagem(4);
       }
 

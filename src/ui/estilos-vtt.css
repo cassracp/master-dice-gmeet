@@ -320,11 +320,11 @@
   min-height: 0;
 }
 
-/* Log de Rolagens (Feed Compacto em Tempo Real - Aprox. 3 Linhas) */
+/* Log de Rolagens (Feed Dinâmico em Tempo Real - Preenche o espaço disponível) */
 .r2r-historico-rolagens {
   flex: 1;
   min-height: 105px;
-  max-height: 145px;
+  max-height: none;
   overflow-y: auto;
   padding: 8px 12px;
   display: flex;
